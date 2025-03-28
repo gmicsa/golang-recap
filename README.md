@@ -1,8 +1,8 @@
 # Golang recap 🚀
 
-Golang quick summary of its most important topics. Generated using Gemini 2.5 Pro.
+Golang quick summary of its most important features. Generated with AI using Gemini 2.5 Pro.
 
-If you are looking for a new job and you want to prepare or if you simply want to review your Golang knowledge, this quick recap is here to help you.
+If you are preparing for a new job or if you simply want to review your Golang knowledge, this quick recap is here to help you.
 
 If you spot any issue, feel free to raise a PR.
 
@@ -16,5 +16,5 @@ If you spot any issue, feel free to raise a PR.
 * [Testing: Advanced Techniques](docs/testing.md)
 * [Tooling & Modules](docs/tooling.md)
 * [Build & Deployment](docs/building.md)
-* [Build & Deployment](docs/performance.md)
+* [Performance & Optimization](docs/performance.md)
 * [HTTP (Server, Client, Routing)](docs/http.md)
