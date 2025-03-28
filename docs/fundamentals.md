@@ -158,6 +158,23 @@ Collections of named fields. Go's way of grouping data (like classes without met
     // nilMap["key"] = 1 // PANIC! Must initialize first: nilMap = make(map[string]int)
     ```
 
+* **Built-ins (Go 1.21):** New general language features:
+    *   `min(x, y, ...)`: Returns the smallest comparable value.
+    *   `max(x, y, ...)`: Returns the largest comparable value.
+    *   `clear(m)`: Deletes all entries from map `m`.
+    *   `clear(s)`: Zeroes elements in slice `s` (length/capacity remain).
+    ```go
+    smallest := min(5, 2, 9) // smallest is 2
+    largest := max(3.1, 4.5, 1.2) // largest is 4.5
+    
+    myMap := map[string]int{"a": 1, "b": 2}
+    clear(myMap) // myMap is now empty: map[]
+    
+    mySlice := []int{10, 20, 30}
+    clear(mySlice) // mySlice is now {0, 0, 0}
+    ```
+* **`slices` and `maps` packages:** Use the standard library `slices` and `maps` packages (stabilized around Go 1.21) for common operations, e.g. functions like `slices.Sort`, `slices.Compact`, `slices.Delete`, `maps.Clone`, `maps.Equal`, etc., as alternatives to manual implementations.
+
 ### 4. Functions & Methods
 
 *   **Functions:** Basic building blocks.
@@ -425,6 +442,20 @@ Go uses an explicit error-checking convention via the built-in `error` interface
         // Handle error (e.g., return, log, retry)
     } else {
         fmt.Println("Success:", result)
+    }
+    ```
+* `errors.Join` (Go 1.20): provides a standard way to combine multiple errors, common when processing multiple items concurrently or sequentially where multiple failures can occur.
+    ```go
+    err1 := errors.New("first error")
+    err2 := fmt.Errorf("second error with details: %w", io.EOF)
+
+    joinedErr := errors.Join(err1, nil, err2) // nil errors are ignored
+
+    fmt.Println(joinedErr) // Output: first error\nsecond error with details: EOF
+
+    // Can still use errors.Is/As on the joined error
+    if errors.Is(joinedErr, io.EOF) {
+        fmt.Println("Joined error contains EOF")
     }
     ```
 

@@ -175,6 +175,37 @@ Provides basic synchronization primitives for shared memory access (use cautious
 
 ### 4. Common Concurrency Patterns
 
+> Note on loop variable capture semantics introduced by default in Go 1.22
+
+* Old Pitfall (Pre-1.22):
+
+    ```go
+    // Pre-Go 1.22 common mistake
+    for _, v := range values {
+        go func() {
+            fmt.Println(v) // All goroutines likely print the *last* value of v!
+        }()
+    }
+    // Pre-Go 1.22 Fix:
+    for _, v := range values {
+        v := v // Create a new variable scoped to the loop iteration
+        go func() {
+            fmt.Println(v)
+        }()
+    }
+    ```
+    
+*  New Behavior (Go 1.22+):
+
+    ```go
+    // Go 1.22+ Behavior (Default)
+    for _, v := range values {
+        go func() {
+            fmt.Println(v) // Each goroutine captures the value of v for *that specific iteration*.
+        }()
+    }
+    ```
+
 *   **Worker Pool:** Limit concurrency, reuse resources.
     ```go
     jobs := make(chan int, 100)

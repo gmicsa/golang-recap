@@ -95,6 +95,11 @@ Profiling and tracing are essential *before* optimizing. **Don't guess, measure!
 *   **Compiler Flags:**
     *   `-gcflags="-m"`: Show escape analysis and inlining decisions.
     *   `-gcflags="-S"`: Output assembly code.
+*   **Profile Guided Optimization (PGO)** support (experimental in 1.20, default in 1.21+)
+    * PGO uses runtime profile data (often from pprof CPU profiles collected in production) to guide compiler optimizations.
+    * `go build -pgo=auto` flag (default) which looks for `default.pgo` in the main package directory.
+    * How to get profiles: Fetch from `/debug/pprof/profile` on a running service.
+    * Can provide significant performance improvements (typically 2-7%) for CPU-bound workloads by optimizing hot paths, inlining, etc., based on actual usage.
 
 ### 5. Benchmarking (`testing` package)
 
@@ -147,6 +152,7 @@ Measure the performance of specific code sections.
 2.  **Inefficient Map/Slice Operations:**
     *   Pre-allocate capacity (`make` with size hint).
     *   Ranging over large arrays/slices by value creates copies (less common now, but be aware).
+    *   Using `clear(map)` or `clear(slice)` (Go 1.21+) where appropriate for resetting collections instead of manually iterating or re-allocating if capacity can be reused.
 3.  **Lock Contention (`sync.Mutex`/`RWMutex`):** (Use mutex/block profiling!)
     *   Keep critical sections (code between `Lock`/`Unlock`) as short as possible.
     *   Use `sync.RWMutex` if reads are much more frequent than writes.
@@ -155,6 +161,7 @@ Measure the performance of specific code sections.
     *   `encoding/json` uses reflection, which has overhead. For high-performance scenarios, consider code-generation based libraries (`ffjson`, `easyjson`, `json-iterator/go`), but adds build complexity.
 5.  **I/O:**
     *   Use buffered I/O (`bufio.Reader`, `bufio.Writer`) to reduce syscall overhead for frequent small reads/writes.
+    *   `log/slog`: while `fmt.Printf` style logging is convenient, structured logging `slog` can be more performant in high-throughput scenarios as it often avoids string formatting and allocations if the log level is disabled.
 6.  **Context Switching:** Extremely high numbers of active, non-blocking goroutines can increase scheduling overhead. Worker pools can help manage concurrency.
 7.  **CGO Overhead:** Calls between Go and C have significant overhead compared to native Go calls. Minimize CGO calls in performance-critical paths.
 

@@ -147,12 +147,43 @@ This cheatsheet covers building HTTP servers, making HTTP requests, and related 
     *   Used when `nil` is passed to `http.ListenAndServe`.
     *   Matches based on longest path prefix.
     *   `/path/` matches subtree, `/path` matches exact path only.
-    *   No support for method-based routing (e.g., GET vs POST on same path requires check inside handler).
-    *   No support for path parameters (e.g., `/users/{id}`).
+    *   From Go 1.22: 
+        * Method matching: mux.HandleFunc("GET /path", getHandler).
+        *  Wildcards: mux.HandleFunc("/users/{id}", userHandler).
+        * Precedence rules (more specific patterns win).
     ```go
-    http.HandleFunc("/", rootHandler)
-    http.HandleFunc("/users/", usersSubtreeHandler) // Matches /users/, /users/1, /users/1/profile
-    http.HandleFunc("/users", exactUsersHandler)    // Matches only /users
+            mux := http.NewServeMux() // Create a new ServeMux
+
+            // Method-specific route
+            mux.HandleFunc("GET /items", func(w http.ResponseWriter, r *http.Request) {
+                fmt.Fprintln(w, "Fetching all items")
+            })
+            mux.HandleFunc("POST /items", func(w http.ResponseWriter, r *http.Request) {
+                fmt.Fprintln(w, "Creating an item")
+            })
+
+            // Route with path parameter/wildcard
+            mux.HandleFunc("GET /items/{id}", func(w http.ResponseWriter, r *http.Request) {
+                itemID := r.PathValue("id") // Access path parameter (Go 1.22+)
+                fmt.Fprintf(w, "Fetching item with ID: %s\n", itemID)
+            })
+
+            // Route with trailing slash and wildcard
+            mux.HandleFunc("GET /files/{$}", func(w http.ResponseWriter, r *http.Request) {
+                // Trailing slash indicates subtree match. '{$}' captures the rest.
+                filePath := r.PathValue("$") 
+                fmt.Fprintf(w, "Accessing file path: %s\n", filePath)
+            })
+
+            // Basic root handler
+            mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) { /* ... */ })
+
+            log.Println("Starting server with enhanced Mux on :8080")
+            // Use the new mux instead of nil (DefaultServeMux)
+            err := http.ListenAndServe(":8080", mux) 
+            if err != nil {
+                log.Fatal(err)
+            }
     ```
 *   **Third-Party Routers (Muxes):** Provide more features like path parameters, method matching, middleware integration. Popular choices:
     *   `gorilla/mux`: Feature-rich and widely used.
@@ -212,6 +243,18 @@ A pattern for wrapping handlers to add cross-cutting concerns (logging, auth, co
     }
     ```
 *   Many third-party routers have built-in support for easier middleware chaining.
+* **Note on logging:** the `log/slog` package (Go 1.21) is the new standard library recommendation for structured logging, which is ideal for HTTP request logging middleware. Brief example of `slog` usage:
+    ```go
+    // Inside a logging middleware:
+    slog.Info("request received", 
+        "method", r.Method, 
+        "path", r.URL.Path,
+        "remote_addr", r.RemoteAddr,
+        "user_agent", r.UserAgent(),
+    )
+    // ... call next handler ...
+    slog.Info("request completed", "status", recordedStatusCode, "duration", time.Since(start))
+    ```
 
 ### 6. HTTP Client (`net/http`)
 
