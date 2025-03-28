@@ -1,4 +1,4 @@
-## Go Standard Library Power-Ups (`io`, `time`, `encoding`) review
+## Go Standard Library Power-Ups (`io`, `time`, `encoding`)
 
 This cheatsheet highlights useful features, interfaces, and patterns within the `io`, `time`, and various `encoding` packages.
 

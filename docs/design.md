@@ -1,4 +1,4 @@
-## Go Idiomatic Principles & Design review
+## Go Idiomatic Principles & Design
 
 This cheatsheet covers conventions, best practices, and design philosophies for writing idiomatic Go code, focusing on clarity, simplicity, and maintainability.
 

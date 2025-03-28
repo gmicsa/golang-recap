@@ -1,4 +1,4 @@
-## Go Performance & Optimization review
+## Go Performance & Optimization
 
 This cheatsheet covers key areas related to Go program performance, including memory management, garbage collection, profiling, benchmarking, and common optimization strategies.
 

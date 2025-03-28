@@ -1,4 +1,4 @@
-## Go HTTP review (Server, Client, Routing)
+## Go HTTP (Server, Client, Routing)
 
 This cheatsheet covers building HTTP servers, making HTTP requests, and related patterns in Go using primarily the standard `net/http` package.
 

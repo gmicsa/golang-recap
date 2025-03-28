@@ -1,4 +1,4 @@
-## Go Fundamentals Review (Types, Structs, Interfaces, Functions, Generics)
+## Go Fundamentals (Types, Structs, Interfaces, Functions, Generics)
 
 This cheatsheet covers fundamental Go language features excluding concurrency primitives.
 

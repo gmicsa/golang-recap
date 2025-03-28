@@ -1,4 +1,4 @@
-## Go Error Handling review
+## Go Error Handling
 
 This cheatsheet covers standard practices, patterns, and nuances for handling errors effectively in Go.
 

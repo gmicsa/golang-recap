@@ -1,4 +1,4 @@
-## Go Testing: Advanced Techniques review
+## Go Testing: Advanced Techniques
 
 This cheatsheet focuses on patterns, tools, and techniques for writing more effective, maintainable, and comprehensive tests in Go.
 

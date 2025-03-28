@@ -1,4 +1,4 @@
-## Go Build & Deployment review
+## Go Build & Deployment
 
 This cheatsheet covers compiling, packaging (especially with Docker), configuring, and running Go applications in production environments.
 

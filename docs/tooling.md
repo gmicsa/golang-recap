@@ -1,4 +1,4 @@
-## Go Tooling & Modules review
+## Go Tooling & Modules
 
 This cheatsheet covers the standard Go command-line tools and the Go Modules system for dependency management.
 

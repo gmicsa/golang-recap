@@ -1,4 +1,4 @@
-## Go Concurrency review
+## Go Concurrency
 
 This cheatsheet covers the fundamentals and common patterns for writing concurrent Go programs.
 
